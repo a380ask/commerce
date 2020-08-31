@@ -1,0 +1,26 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <div class="card-columns">
+    {% for i in listing %}
+    <a href="{% url 'view' i.id %}" class="btn">
+        <div class="card border-primary">
+          <img class="bd-placeholder-img card-img-top" width="100%" src="{{ i.image }}" xmlns=""
+               aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" role="img">
+                <rect width="100%" height="100%" fill="#868e96"/></img>
+          <div class="card-body">
+            <h5 class="card-title">{{ i.productName }}</h5>
+            <p class="card-text">{{ i.description }}</p>
+          </div>
+          <ul class="list-group list-group-flush border">
+<!--            <li class="list-group-item">Category: <strong>{{ i.category }}</strong></li>-->
+<!--            <li class="list-group-item list-group-item-info">Seller: <strong>{{ i.seller_username }}</strong></li>-->
+            <li class="list-group-item">Current bid: <strong>${{ i.starting_bid }}</strong></li>
+<!--            <li class="list-group-item list-group-item-info">Posted at: <strong>{{ i.date }}</strong></li>-->
+          </ul>
+        </div>
+    </a>
+    {% endfor %}
+    </div>
+{% endblock %}

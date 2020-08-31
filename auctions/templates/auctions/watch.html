@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+
+
+<div class="card-columns">
+    {% for i in watch %}
+        {% for a in listing %}
+            {% if a.id == i.list_id %}
+            {% if user.username == i.user %}
+            <a href="{% url 'view' a.id %}" class="">
+            <div style="" class="card">
+                <img class="card-img-top" src="{{ a.image }}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">{{ a.productName }}</h5>
+                    <p class="card-text"><small class="text-muted">Posted on: <strong> {{ a.date }}</strong></small></p>
+                </div>
+            </div>
+            </a>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+
+{% endblock %}

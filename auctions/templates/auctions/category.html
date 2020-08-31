@@ -1,0 +1,28 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+<h2>Add a Category</h2>
+
+{% if message %}
+<div class="alert alert-success" role="alert">
+{{ message }}
+</div>
+{% endif %}
+
+
+<ul>
+    {% for category in totalCategory %}
+    <li><a href="{% url 'category' category.category %}">{{ category.category }}</a></li>
+    {% endfor %}
+</ul>
+
+
+<form action="{% url 'changeCategory' %}" method="post">{% csrf_token %}
+    <div class="form-group">
+        <label for="category">Add a new Category</label>
+        <input class="form-control" type="text" name="category" id="category">
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary">
+    </div>
+</form>
+{% endblock %}

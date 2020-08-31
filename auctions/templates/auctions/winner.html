@@ -1,0 +1,14 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if message %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endif %}
+
+    {% for i in winner %}
+        <p>The winner is: <strong>{{ i.winner }}</strong></p>
+        <p>Going once...Going twice...Sold at: <strong>$ {{ i.winprice }}</strong></p>
+    {% endfor %}
+
+{% endblock %}

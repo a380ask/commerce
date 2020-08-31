@@ -1,0 +1,126 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if message == "Success!!" %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+    {% elif message == "Your bid should be higher!!" %}
+    <div class="alert alert-danger">
+        {{ message }}
+    </div>
+    {% endif %}
+
+
+
+    {% for i in listing %}
+    {% if i == list_id %}
+
+    <div class="mb-3">
+    {% if user.username == i.seller_username %}
+    {% if closed %}
+    <a class="btn btn-warning disabled" href="{% url 'winner' i.id %}">The bid has been closed. </a>
+    {% else %}
+    <a class="btn btn-danger" href="{% url 'winner' i.id %}">Close Bid</a>
+    {% endif %}
+    {% endif %}
+    </div>
+    {% for win in winner %}
+    <div class="alert alert-success mt-3">Going once... Going Twice... Sold to... <strong>{{ win.winner }}</strong></div>
+    {% endfor %}
+
+
+    <div class="card">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <img class="bd-placeholder-img card-img-top" width="100%" src="{{ i.image }}" xmlns=""
+                   aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" role="img">
+                    <rect width="100%" height="100%" fill="#868e96"/></img>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ i.productName }}</h5>
+                <p class="card-text">{{ i.description }}</p>
+              </div>
+            </div>
+              <ul class="list-group col-7 list-group-flush text-center">
+                <li class="list-group-item">Category: <strong>{{ i.category }}</strong></li>
+                <li class="list-group-item list-group-item-info">Seller: <strong>{{ i.seller_username }}</strong></li>
+                <li class="list-group-item">Bid: <strong>${{ i.starting_bid }}</strong></li>
+                <li class="list-group-item list-group-item-info">Posted at: <strong>{{ i.date }}</strong></li>
+              </ul>
+            <div class="col-3">
+                <form class="card p-3 m-3" action="{% url 'view' i.id %}" method="post">{% csrf_token %}
+                    <div class="form-group">
+                        <label for="rebid">Enter your bid ($):</label>
+                        {% if closed %}
+                        <input class="form-control" type="number" disabled name="rebid">
+                        {% else %}
+                        <input class="form-control" type="number" id="rebid" name="rebid">
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {% if closed %}
+                        <input class="btn btn-outline-primary" disabled type="submit">
+                        {% else %}
+                        <input class="btn btn-outline-primary" type="submit">
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            <div class="col-2 mt-5 text-center">
+                {% if closed %}
+                {% if added %}
+                <a href="{% url 'watchlist' i.id %}" class="btn btn-primary disabled">Remove from WatchList</a>
+                {% else %}
+                <a href="{% url 'watchlist' i.id %}" class="btn btn-secondary disabled">Add to WatchList</a>
+                {% endif %}
+
+                {% else %}
+                {% if added %}
+                <a href="{% url 'watchlist' i.id %}" class="btn btn-primary">Remove from WatchList</a>
+                {% else %}
+                <a href="{% url 'watchlist' i.id %}" class="btn btn-secondary">Add to WatchList</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="p-3 ml-3 mr-3">
+        <div class="p-4">
+            <h5>Comments</h5>
+            <form action="{% url 'comments' i.id %}" method="post">{% csrf_token %}
+                <div class="form-group">
+                    <label for="comments">Enter your comments about <strong>{{ i.productName }}</strong>: </label>
+                    <textarea class="form-control" rows="4" cols="20" id="comments" name="comments"></textarea>
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-outline-secondary" type="submit">
+                </div>
+            </form>
+        </div>
+        <table class="table table-hover table-striped table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Comments
+                <th>Time posted</th>
+            </tr>
+            </thead>
+            {% for g in comment %}
+            {% if g.list_id == i.id %}
+            <tr>
+                <td>{{ g.user }}</td>
+                <td>{{ g.comment }}</td>
+                <td>{{ g.time }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+
+    {% endif %}
+    {% endfor %}
+
+
+{% endblock %}
